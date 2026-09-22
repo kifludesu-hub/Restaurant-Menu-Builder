@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Restaurant Dashboard</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+<header class="site-header"><a class="brand" href="/">DESU Menu</a><nav><a id="publicLink" target="_blank">View menu</a><button id="logout" class="btn">Log out</button></nav></header>
+<main class="dashboard">
+<section class="dash-head"><div><span class="eyebrow">Restaurant dashboard</span><h1 id="restaurantName">Loading…</h1><p id="planText" class="muted"></p></div><div id="qrBox" class="qr-box"></div></section>
+<div class="grid-2">
+<section class="panel"><h2>Restaurant</h2><form id="restaurantForm"><label>Name<input id="rName" required></label><label>Slug<input id="rSlug" required pattern="[a-z0-9-]+"></label><label>Address<input id="rAddress"></label><label>Phone<input id="rPhone"></label><button class="btn btn-primary">Save restaurant</button></form></section>
+<section class="panel"><h2>Subscription</h2><div class="plan"><b>Free</b><span>1 menu • core features</span></div><div class="plan"><b>Basic — 100 ETB/month</b><span>Photos, themes and extended features</span><button class="btn" data-plan="BASIC">Choose Basic</button></div><div class="plan"><b>Pro — 250 ETB/month</b><span>Advanced branding and analytics</span><button class="btn btn-primary" data-plan="PRO">Choose Pro</button></div><p id="paymentMsg" class="notice"></p></section>
+</div>
+<section class="panel"><div class="section-head"><div><h2>Restaurant logo</h2><p class="muted">Upload a logo to Supabase Storage.</p><input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp"></div><button id="uploadLogo" class="btn">Upload logo</button></div><p id="logoMsg" class="notice"></p></section>
+<section class="panel"><div class="section-head"><div><h2>Menu items</h2><p class="muted">Create categories and items. Changes are immediately saved to Supabase.</p></div><button id="addCategory" class="btn">Add category</button></div><div id="menuEditor"></div></section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script><script src="/js/config.js"></script><script src="/js/dashboard.js"></script>
+</body></html>

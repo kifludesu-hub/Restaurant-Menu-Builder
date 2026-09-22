@@ -1,0 +1,5 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create Restaurant Account</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><main class="auth-shell"><div class="auth-card"><a class="brand" href="/">DESU Menu</a><h1>Create restaurant account</h1><p class="muted">Your account starts on the Free plan.</p>
+<form id="signupForm"><label>Owner name<input id="name" required></label><label>Email<input id="email" type="email" required></label><label>Password<input id="password" type="password" minlength="8" required></label><label>Restaurant name<input id="restaurant" required></label><label>Restaurant slug<input id="slug" placeholder="ababa-restaurant" required pattern="[a-z0-9-]+"></label><button class="btn btn-primary full" type="submit">Create account</button></form><p id="msg" class="notice"></p><p>Already registered? <a href="/login.html">Log in</a></p></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/js/config.js"></script><script src="/js/auth.js"></script><script>initSignup();</script></body></html>
