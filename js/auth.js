@@ -5,13 +5,13 @@ async function initSignup(){
     const name=document.querySelector("#name").value.trim(),email=document.querySelector("#email").value.trim(),password=document.querySelector("#password").value,restaurant=document.querySelector("#restaurant").value.trim(),slug=document.querySelector("#slug").value.trim().toLowerCase();
     const {data,error}=await desuSupabase.auth.signUp({email,password,options:{data:{full_name:name}}});
     if(error){msg.textContent=error.message;return}
-    if(!data.user){msg.textContent="Account created. Check your email.";return}
-    const {error:pErr}=await desuSupabase.from("profiles").upsert({id:data.user.id,full_name:name});
-    if(pErr){msg.textContent=pErr.message;return}
+    if(!data.session){msg.textContent="Account created. Check your email to confirm, then log in to finish setting up your restaurant.";return}
+    // The profile row is created server-side by the on_auth_user_created trigger.
+    // Only create the restaurant here, once we actually have an authenticated session.
     const {error:rErr}=await desuSupabase.from("restaurants").insert({owner_id:data.user.id,name:restaurant,slug});
     if(rErr){msg.textContent=rErr.message;return}
-    msg.textContent=data.session?"Account created. Redirecting…":"Account created. Check your email, then log in.";
-    if(data.session) location.href="/dashboard.html";
+    msg.textContent="Account created. Redirecting…";
+    location.href="/dashboard.html";
   });
 }
 async function initLogin(){
