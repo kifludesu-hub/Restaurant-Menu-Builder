@@ -4,10 +4,15 @@ async function requireUser(){
   const {data:{user}}=await desuSupabase.auth.getUser();
   if(!user){location.href="/login.html";return null} return user;
 }
+let currentUser=null;
 async function loadDashboard(){
   const user=await requireUser(); if(!user)return;
+  currentUser=user;
   const {data:r,error}=await desuSupabase.from("restaurants").select("*").eq("owner_id",user.id).maybeSingle();
-  if(error||!r){document.body.innerHTML="<main class='auth-shell'><div class='auth-card'><h1>No restaurant found</h1><p>Create an account again or contact admin.</p></div></main>";return}
+  if(error){alert(error.message);return}
+  if(!r){document.querySelector("#setupPanel").style.display="block";document.querySelector("#dashboardContent").style.display="none";return}
+  document.querySelector("#setupPanel").style.display="none";
+  document.querySelector("#dashboardContent").style.display="block";
   restaurant=r;
   document.querySelector("#restaurantName").textContent=r.name;
   document.querySelector("#planText").textContent=`Plan: ${r.plan||"FREE"} • Status: ${r.subscription_status||"ACTIVE"}`;
@@ -59,6 +64,17 @@ document.querySelector("#logout").addEventListener("click",async()=>{await desuS
 document.querySelector("#addCategory").addEventListener("click",async()=>{const {error}=await desuSupabase.from("categories").insert({restaurant_id:restaurant.id,name:"New category",position:categories.length});if(error)alert(error.message);else await loadMenu()});
 document.querySelector("#restaurantForm").addEventListener("submit",async e=>{e.preventDefault();const slug=document.querySelector("#rSlug").value.trim().toLowerCase();const {error}=await desuSupabase.from("restaurants").update({name:document.querySelector("#rName").value.trim(),slug,address:document.querySelector("#rAddress").value.trim(),phone:document.querySelector("#rPhone").value.trim()}).eq("id",restaurant.id);if(error)alert(error.message);else{alert("Saved");location.reload()}});
 document.querySelectorAll("[data-plan]").forEach(b=>b.addEventListener("click",async()=>{const msg=document.querySelector("#paymentMsg");msg.textContent="Creating payment…";try{const {data:{session}}=await desuSupabase.auth.getSession();const res=await fetch("/api/chapa/initialize",{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${session.access_token}`},body:JSON.stringify({plan:b.dataset.plan})});const j=await res.json();if(!res.ok)throw new Error(j.error||"Payment initialization failed");location.href=j.checkout_url}catch(e){msg.textContent=e.message}}));
+document.querySelector("#setupForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const msg=document.querySelector("#setupMsg");
+  msg.textContent="Creating…";
+  const name=document.querySelector("#sName").value.trim();
+  const slug=document.querySelector("#sSlug").value.trim().toLowerCase();
+  const {error}=await desuSupabase.from("restaurants").insert({owner_id:currentUser.id,name,slug});
+  if(error){msg.textContent=error.message;return}
+  msg.textContent="Created! Loading your dashboard…";
+  await loadDashboard();
+});
 loadDashboard();
 document.querySelector("#uploadLogo").addEventListener("click",async()=>{
  const file=document.querySelector("#logoFile").files[0],msg=document.querySelector("#logoMsg");
