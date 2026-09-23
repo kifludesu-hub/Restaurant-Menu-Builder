@@ -3,6 +3,17 @@
 <body>
 <header class="site-header"><a class="brand" href="/">DESU Menu</a><nav><a id="publicLink" target="_blank">View menu</a><button id="logout" class="btn">Log out</button></nav></header>
 <main class="dashboard">
+<section id="setupPanel" class="panel" style="display:none">
+  <h2>Set up your restaurant</h2>
+  <p class="muted">One-time setup — this creates your restaurant and your public menu link.</p>
+  <form id="setupForm">
+    <label>Restaurant name<input id="sName" required></label>
+    <label>Menu URL slug<input id="sSlug" required pattern="[a-z0-9-]+" placeholder="e.g. my-cafe"></label>
+    <button class="btn btn-primary">Create restaurant</button>
+  </form>
+  <p id="setupMsg" class="notice"></p>
+</section>
+<div id="dashboardContent" style="display:none">
 <section class="dash-head"><div><span class="eyebrow">Restaurant dashboard</span><h1 id="restaurantName">Loading…</h1><p id="planText" class="muted"></p></div><div id="qrBox" class="qr-box"></div></section>
 <div class="grid-2">
 <section class="panel"><h2>Restaurant</h2><form id="restaurantForm"><label>Name<input id="rName" required></label><label>Slug<input id="rSlug" required pattern="[a-z0-9-]+"></label><label>Address<input id="rAddress"></label><label>Phone<input id="rPhone"></label><button class="btn btn-primary">Save restaurant</button></form></section>
@@ -10,6 +21,7 @@
 </div>
 <section class="panel"><div class="section-head"><div><h2>Restaurant logo</h2><p class="muted">Upload a logo to Supabase Storage.</p><input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp"></div><button id="uploadLogo" class="btn">Upload logo</button></div><p id="logoMsg" class="notice"></p></section>
 <section class="panel"><div class="section-head"><div><h2>Menu items</h2><p class="muted">Create categories and items. Changes are immediately saved to Supabase.</p></div><button id="addCategory" class="btn">Add category</button></div><div id="menuEditor"></div></section>
+</div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script><script src="/js/config.js"></script><script src="/js/dashboard.js"></script>
 </body></html>
